@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
-import 'package:stylish/data/firebase/firebase_curd_core.dart';
+import 'package:stylish/data/firebase/firebase_firestore_core.dart';
 import 'package:stylish/models/auth/user.dart';
 
 @injectable
-class UserRepo extends FirebaseCRUDCore<UserModel> {
+class UserRepo extends FirebaseFirestoreCore<UserModel> {
   UserRepo() : super(pathCollection: 'user');
 
   @override

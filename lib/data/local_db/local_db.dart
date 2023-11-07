@@ -7,21 +7,27 @@ import 'package:stylish/models/auth/user.dart';
 
 @module
 abstract class RegisterModule {
+  @preResolve
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 }
 
 @injectable
 class LocalDbService {
-  Future<bool> clear() async {
+  Future<bool?> clear() async {
     return getIt<SharedPreferences>().clear();
   }
 
-  Future<void> saveUserInfo(UserModel user) {
+  Future<bool?> saveUserInfo(UserModel user) async {
     return getIt<SharedPreferences>()
         .setString(LocalDbConstant.userKey, jsonEncode(user));
   }
 
   UserModel getUserInfo() {
+    if ((getIt<SharedPreferences>().getString(LocalDbConstant.userKey) ?? '')
+        .isEmpty) {
+      return const UserModel();
+    }
+
     return UserModel.fromJson(jsonDecode(
         getIt<SharedPreferences>().getString(LocalDbConstant.userKey) ?? ''));
   }

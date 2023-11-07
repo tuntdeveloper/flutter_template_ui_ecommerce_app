@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract class FirebaseCRUDCoreBase<T> {
+abstract class FirebaseFirestoreCoreBase<T> {
   Future<void> update();
 
   Future<void> create();
@@ -12,8 +12,8 @@ abstract class FirebaseCRUDCoreBase<T> {
   Future<T> get();
 }
 
-abstract class FirebaseCRUDCore<T> extends FirebaseCRUDCoreBase {
-  FirebaseCRUDCore({required this.pathCollection});
+abstract class FirebaseFirestoreCore<T> extends FirebaseFirestoreCoreBase {
+  FirebaseFirestoreCore({required this.pathCollection});
 
   final String pathCollection;
 
@@ -29,8 +29,7 @@ abstract class FirebaseCRUDCore<T> extends FirebaseCRUDCoreBase {
 
   @override
   Future<void> delete({String? id, String? field}) async {
-    final CollectionReference response =
-        FirebaseFirestore.instance.collection(pathCollection);
+    final response = FirebaseFirestore.instance.collection(pathCollection);
     var documentReference = response.where(field ?? 'id', isEqualTo: id);
 
     final result = await documentReference.get();
@@ -63,7 +62,7 @@ abstract class FirebaseCRUDCore<T> extends FirebaseCRUDCoreBase {
     QueryData? query,
     List<FilterData> multipleFilters = const [],
   }) async {
-    Query<Map<String, dynamic>> response =
+    final response =
         FirebaseFirestore.instance.collection(pathCollection).limit(100);
 
     for (final filter in multipleFilters) {
