@@ -1,22 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stylish/models/chat/chat_session.dart';
 import 'package:stylish/models/chat/message.dart';
 import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
 import 'package:stylish/screens/chat/bloc/chat_event.dart';
 import 'package:stylish/screens/chat/bloc/chat_state.dart';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen({super.key, this.chatPersonId});
+  const MessageScreen(
+      {super.key, required this.chatSessionModel, required this.chatPersonIds});
 
-  final String? chatPersonId;
+  final ChatSessionModel? chatSessionModel;
+  final List<String?> chatPersonIds;
 
   static Future<dynamic> push(BuildContext context,
-      {required String? chatPersonId}) async {
+      {ChatSessionModel? chatSessionModel,
+      List<String?> chatPersonIds = const []}) async {
     return Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => MessageScreen(chatPersonId: chatPersonId)));
+            builder: (_) => MessageScreen(
+                chatSessionModel: chatSessionModel,
+                chatPersonIds: chatPersonIds)));
   }
 
   @override
@@ -28,22 +34,21 @@ class _MessageScreenState extends State<MessageScreen> {
   final _textEditingController = TextEditingController();
   final _scrollController = ScrollController();
 
-  late final ChatBloc bloc;
+  // late final ChatBloc bloc;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) =>
+  //       bloc = context.read<ChatBloc>()
+  //         ..add(ChatOnListenMessage(chatPersonId: '')));
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      bloc = context.read<ChatBloc>()
-        ..add(ChatOnListenMessage(chatPersonId: widget.chatPersonId));
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    bloc.add(const ChatOnDisposeMessageScreen());
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   bloc.add(const ChatOnDisposeMessageScreen());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +106,16 @@ class _MessageScreenState extends State<MessageScreen> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         suffixIcon: InkWell(
-                            onTap: () => context.read<ChatBloc>().add(
-                                ChatOnCreatingNewChat(
-                                    chatPersonId: widget.chatPersonId)),
+                            onTap: () {
+                              context
+                                  .read<ChatBloc>()
+                                  .add(ChatOnCreatingNewMessage(
+                                    chatPersonIds: widget.chatPersonIds,
+                                    chatSessionId: widget.chatSessionModel?.id,
+                                    message: _textEditingController.text,
+                                  ));
+                              _textEditingController.clear();
+                            },
                             child: const Icon(
                                 CupertinoIcons.arrow_right_circle_fill))),
                   ),

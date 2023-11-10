@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stylish/data/di/dependency_injection.dart';
 import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
 import 'package:stylish/screens/chat/bloc/chat_event.dart';
 import 'package:stylish/screens/chat/bloc/chat_state.dart';
@@ -20,7 +19,6 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -35,10 +33,7 @@ class _ContactScreenState extends State<ContactScreen> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(
-            CupertinoIcons.back,
-            color: Colors.black,
-          ),
+          child: const Icon(CupertinoIcons.back, color: Colors.black),
         ),
         title: Text(
           'Contacts',
@@ -56,7 +51,7 @@ class _ContactScreenState extends State<ContactScreen> {
             return InkWell(
               onTap: () {
                 MessageScreen.push(context,
-                    chatPersonId: state.contacts[index].id);
+                  chatPersonIds: [state.contacts[index].id]);
               },
               child: ListTile(
                 title: Text(state.contacts[index].name ?? ''),

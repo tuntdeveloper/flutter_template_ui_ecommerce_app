@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-abstract class FirebaseFirestoreCoreBase<T> {
-  Future<void> update();
+abstract class FirebaseFireStoreCoreBase<T> {
+  Future<void> update({required String id});
 
   Future<void> create();
 
@@ -12,8 +12,8 @@ abstract class FirebaseFirestoreCoreBase<T> {
   Future<T> get();
 }
 
-abstract class FirebaseFirestoreCore<T> extends FirebaseFirestoreCoreBase {
-  FirebaseFirestoreCore({required this.pathCollection});
+abstract class FirebaseFireStoreCore<T> extends FirebaseFireStoreCoreBase {
+  FirebaseFireStoreCore({required this.pathCollection});
 
   final String pathCollection;
 
@@ -42,7 +42,7 @@ abstract class FirebaseFirestoreCore<T> extends FirebaseFirestoreCoreBase {
   }
 
   @override
-  Future<void> update({Map<String, dynamic>? data, String? id}) async {
+  Future<void> update({Map<String, dynamic>? data, required String id}) async {
     if (data == null) return;
 
     final response = FirebaseFirestore.instance.collection(pathCollection);
@@ -54,7 +54,7 @@ abstract class FirebaseFirestoreCore<T> extends FirebaseFirestoreCoreBase {
 
     DocumentReference doc = response.doc(_id);
 
-    return doc.update(data);
+    return doc.set(data, SetOptions(merge: true));
   }
 
   @override
@@ -79,7 +79,7 @@ abstract class FirebaseFirestoreCore<T> extends FirebaseFirestoreCoreBase {
   }
 
   @override
-  Future<T> get({
+  Future<T?> get({
     QueryData? query,
     List<FilterData> multipleFilters = const [],
   }) async {

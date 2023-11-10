@@ -12,6 +12,7 @@ class UserModel with _$UserModel {
     String? email,
     String? hashPassword,
     UserRoleEnum? role,
+    @Default(<String>[]) List<String> chatSessionIds,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

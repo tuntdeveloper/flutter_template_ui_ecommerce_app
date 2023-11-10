@@ -4,8 +4,8 @@ import 'package:stylish/data/firebase/firebase_firestore_core.dart';
 import 'package:stylish/models/chat/message.dart';
 
 @injectable
-class MessageFirestoreRepo extends FirebaseFirestoreCore<MessageModel> {
-  MessageFirestoreRepo() : super(pathCollection: 'message');
+class MessageFireStoreRepo extends FirebaseFireStoreCore<MessageModel> {
+  MessageFireStoreRepo() : super(pathCollection: 'message');
 
   @override
   fromJson(Map<String, dynamic> json) {
@@ -15,7 +15,7 @@ class MessageFirestoreRepo extends FirebaseFirestoreCore<MessageModel> {
 
 @injectable
 class MessageDatabaseRepo extends FirebaseDatabaseCore<MessageModel> {
-  MessageDatabaseRepo() : super(pathCollection: '');
+  MessageDatabaseRepo() : super(pathCollection: 'message');
 
   @override
   fromJson(Map<String, dynamic> json) {

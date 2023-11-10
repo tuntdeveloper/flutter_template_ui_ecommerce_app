@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stylish/screens/auth/bloc/auth_bloc.dart';
 import 'package:stylish/screens/auth/bloc/auth_event.dart';
 import 'package:stylish/screens/auth/bloc/auth_state.dart';
-import 'package:stylish/screens/home/home_screen.dart';
+import 'package:stylish/screens/chat/chat_session_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.actions is AuthOnSignUpSuccess) {
-          HomeScreen.push(context);
+          ChatSessionScreen.push(context, shouldReplace: true);
         }
       },
       child: Scaffold(

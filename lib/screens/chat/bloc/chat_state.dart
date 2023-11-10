@@ -12,6 +12,8 @@ class ChatState with _$ChatState {
     @Default(<UserModel>[]) List<UserModel> contacts,
     @Default(<ChatSessionModel>[]) List<ChatSessionModel> chatSessions,
     @Default(<MessageModel>[]) List<MessageModel> messages,
+    String? chatSessionId,
+    String? chatSessionIdDraft,
     ChatStateAction? action,
   }) = _ChatState;
 }
@@ -20,4 +22,7 @@ class ChatState with _$ChatState {
 class ChatStateAction with _$ChatStateAction {
   const factory ChatStateAction.onCreatedNewChatSession() =
       ChatActionOnCreatedNewChatSession;
+
+  const factory ChatStateAction.onCreateNewDraftChatSessionSuccess() =
+      ChatOnCreateNewDraftChatSessionSuccess;
 }
