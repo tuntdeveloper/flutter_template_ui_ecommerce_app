@@ -58,7 +58,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ]);
 
         if (chatSession != null) {
-          chatSessions.add(chatSession);
+          final chatPersonIds = <String?>[];
+
+          chatPersonIds
+            ..addAll(chatSession.chatUserIds)
+            ..removeWhere((element) =>
+                element == getIt<LocalDbService>().getUserInfo().id);
+
+          final chatPerson = await _userRepo.get(multipleFilters: [
+            FilterData('id', chatPersonIds.first ?? ''),
+          ]);
+
+          chatSessions.add(chatSession.copyWith(title: chatPerson?.name));
         }
       }
 
@@ -76,25 +87,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _chatOnListenMessage(
       ChatOnListenMessage event, Emitter<ChatState> emit) async {
-    emit(state.copyWith(chatSessionId: event.chatSessionId));
+    emit(state.copyWith(
+        chatSessionId: event.chatSessionId ?? state.chatSessionId));
 
-    // try {
-    //   await for (final value in _messageDatabaseRepo.onChildCreated(
-    //     filters: [
-    //       FilterData('chat_session', 'chat_session'),
-    //       FilterData('chatPersonId', event.chatPersonId ?? '')
-    //     ],
-    //   )) {
-    //     if (value.snapshot.exists && value.snapshot.value != null) {
-    //       final messageJson = value.snapshot.value.toJson;
-    //       final message = MessageModel.fromJson(messageJson);
-    //
-    //       emit(state.copyWith(messages: [message, ...state.messages]));
-    //     }
-    //   }
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
+    try {
+      await for (final value in _chatSessionDatabaseRepo.onChildCreated(
+        filters: [FilterData('chatSessionId', state.chatSessionId ?? '')],
+      )) {
+        if (value.snapshot.exists && value.snapshot.value != null) {
+          final messageJson = value.snapshot.value.toJson;
+          final message = MessageModel.fromJson(messageJson);
+
+          emit(state.copyWith(messages: [message, ...state.messages]));
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> _chatOnCreatingNewChatSession(
@@ -140,7 +149,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           id: currentActiveChatSessionId,
           createdAt: DateTime.now(),
           chatUserIds: [currentUserId, chatUserId],
-          title: chatUser.name,
         ).toJson(),
       );
 
@@ -153,6 +161,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _chatOnCreatingNewMessage(
       ChatOnCreatingNewMessage event, Emitter<ChatState> emit) async {
     try {
+      //* Navigate from Contact Screen*/
       if (state.chatSessionId == null) {
         await _chatOnCreatingNewChatSession(
             ChatOnCreatingNewChatSession(chatPersonIds: event.chatPersonIds),
@@ -187,6 +196,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _userRepo.getAll();
+
+    result.removeWhere(
+        (element) => element.id == getIt<LocalDbService>().getUserInfo().id);
 
     emit(state.copyWith(
       contacts: result,

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:stylish/data/di/dependency_injection.dart';
 import 'package:stylish/data/firebase/firebase_firestore_core.dart';
@@ -84,11 +82,10 @@ abstract class FirebaseDatabaseCore<T> extends FirebaseDatabaseCoreBase {
 
   @override
   Stream<DatabaseEvent> onChildCreated({
+    String? ref,
     List<FilterData> filters = const [],
   }) {
-    final userId = getIt<LocalDbService>().getUserInfo().id;
-
-    var response = FirebaseDatabase.instance.ref('$userId');
+    var response = FirebaseDatabase.instance.ref(ref ?? pathCollection);
 
     for (final filter in filters) {
       response = response.child(filter.value);

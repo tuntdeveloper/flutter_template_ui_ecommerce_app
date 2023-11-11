@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stylish/constants.dart';
 import 'package:stylish/data/di/dependency_injection.dart';
+import 'package:stylish/data/local_db/local_db.dart';
 import 'package:stylish/screens/auth/bloc/auth_bloc.dart';
 import 'package:stylish/screens/auth/bloc/auth_event.dart';
 import 'package:stylish/screens/auth/bloc/auth_state.dart';
@@ -46,7 +47,7 @@ class _ChatSessionScreenState extends State<ChatSessionScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (BuildContext context, AuthState state) {
-        if(state.actions is AuthOnSignOutSuccess) {
+        if (state.actions is AuthOnSignOutSuccess) {
           SignInScreen.push(context, shouldReplace: true);
         }
       },
@@ -55,14 +56,12 @@ class _ChatSessionScreenState extends State<ChatSessionScreen> {
         drawer: Drawer(
             backgroundColor: Colors.white,
             width: 300,
-            // Add a ListView to the drawer. This ensures the user can scroll
-            // through the options in the drawer if there isn't enough vertical
-            // space to fit everything.
             child: Column(
               children: [
                 const Spacer(),
                 InkWell(
-                  onTap: () => context.read<AuthBloc>().add(const AuthOnSignOut()),
+                  onTap: () =>
+                      context.read<AuthBloc>().add(const AuthOnSignOut()),
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 24),
                     alignment: Alignment.center,
@@ -100,7 +99,7 @@ class _ChatSessionScreenState extends State<ChatSessionScreen> {
             ),
           ],
           title: Text(
-            'Chat',
+            'Chat (${getIt<LocalDbService>().getUserInfo().name})',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
@@ -114,10 +113,11 @@ class _ChatSessionScreenState extends State<ChatSessionScreen> {
                 itemCount: state.chatSessions.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () => MessageScreen.push(context),
+                    onTap: () => MessageScreen.push(context,
+                        chatSessionModel: state.chatSessions[index]),
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
                       decoration: const BoxDecoration(
                         color: bgColor,
                       ),
@@ -132,11 +132,13 @@ class _ChatSessionScreenState extends State<ChatSessionScreen> {
                                 children: [
                                   Text(
                                     '${state.chatSessions[index].title}',
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
                                   Text(
                                     '${state.chatSessions[index].id}',
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               )),

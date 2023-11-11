@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class FirebaseFireStoreCoreBase<T> {
   Future<void> update({required String id});
@@ -83,21 +84,26 @@ abstract class FirebaseFireStoreCore<T> extends FirebaseFireStoreCoreBase {
     QueryData? query,
     List<FilterData> multipleFilters = const [],
   }) async {
-    final response = FirebaseFirestore.instance.collection(pathCollection);
+    try {
+      final response = FirebaseFirestore.instance.collection(pathCollection);
 
-    for (final filter in multipleFilters) {
-      response.where(filter.field, isEqualTo: filter.value);
+      for (final filter in multipleFilters) {
+        response.where(filter.field, isEqualTo: filter.value);
+      }
+
+      if (query != null) {
+        response.orderBy(query.fieldSortBy, descending: query.isDesc);
+      }
+
+      var documentReference = await response.get();
+
+      if (documentReference.docs.isEmpty) return fromJson({});
+
+      return fromJson(documentReference.docs.first.data());
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
-
-    if (query != null) {
-      response.orderBy(query.fieldSortBy, descending: query.isDesc);
-    }
-
-    var documentReference = await response.get();
-
-    if (documentReference.docs.isEmpty) return fromJson({});
-
-    return fromJson(documentReference.docs.first.data());
   }
 }
 

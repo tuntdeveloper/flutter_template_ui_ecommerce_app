@@ -34,21 +34,21 @@ class _MessageScreenState extends State<MessageScreen> {
   final _textEditingController = TextEditingController();
   final _scrollController = ScrollController();
 
-  // late final ChatBloc bloc;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) =>
-  //       bloc = context.read<ChatBloc>()
-  //         ..add(ChatOnListenMessage(chatPersonId: '')));
-  // }
+  late final ChatBloc bloc;
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   bloc.add(const ChatOnDisposeMessageScreen());
-  // }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => bloc = context
+        .read<ChatBloc>()
+      ..add(ChatOnListenMessage(chatSessionId: widget.chatSessionModel?.id)));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    bloc.add(const ChatOnDisposeMessageScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
