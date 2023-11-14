@@ -12,8 +12,8 @@ import 'package:stylish/extension/object_extension.dart';
 import 'package:stylish/models/auth/user.dart';
 import 'package:stylish/models/chat/chat_session.dart';
 import 'package:stylish/models/chat/message.dart';
-import 'package:stylish/screens/chat/bloc/chat_event.dart';
-import 'package:stylish/screens/chat/bloc/chat_state.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_event.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_state.dart';
 
 @injectable
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -112,43 +112,32 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       final currentActiveChatSessionId =
           DateTime.now().microsecondsSinceEpoch.toString();
 
-      final currentUserId = getIt<LocalDbService>().getUserInfo().id;
-      final chatUserId = event.chatPersonIds.first;
+      final chatPersonIds = [
+        getIt<LocalDbService>().getUserInfo().id,
+        ...event.chatPersonIds
+      ];
 
-      final currentUserJson = await FirebaseFirestore.instance
-          .collection('user')
-          .where('id', isEqualTo: currentUserId)
-          .get();
+      for (final chatPersonId in chatPersonIds) {
+        final chatPersonJson = await FirebaseFirestore.instance
+            .collection('user')
+            .where('id', isEqualTo: chatPersonId)
+            .get();
 
-      final chatUserJson = await FirebaseFirestore.instance
-          .collection('user')
-          .where('id', isEqualTo: chatUserId)
-          .get();
+        final chatPerson = UserModel.fromJson(chatPersonJson.docs.first.data());
 
-      final currentUser = UserModel.fromJson(currentUserJson.docs.first.data());
-
-      final chatUser = UserModel.fromJson(chatUserJson.docs.first.data());
-
-      await _userRepo.update(
-          id: currentUserId ?? '',
-          data: currentUser.copyWith(chatSessionIds: [
-            ...currentUser.chatSessionIds,
-            currentActiveChatSessionId
-          ]).toJson());
-
-      await _userRepo.update(
-        id: chatUserId ?? '',
-        data: chatUser.copyWith(chatSessionIds: [
-          ...chatUser.chatSessionIds,
-          currentActiveChatSessionId
-        ]).toJson(),
-      );
+        await _userRepo.update(
+            id: chatPersonId ?? '',
+            data: chatPerson.copyWith(chatSessionIds: [
+              ...chatPerson.chatSessionIds,
+              currentActiveChatSessionId
+            ]).toJson());
+      }
 
       await _chatSessionFireStoreRepo.create(
         data: ChatSessionModel(
           id: currentActiveChatSessionId,
           createdAt: DateTime.now(),
-          chatUserIds: [currentUserId, chatUserId],
+          chatUserIds: chatPersonIds,
         ).toJson(),
       );
 
@@ -197,8 +186,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final result = await _userRepo.getAll();
 
-    result.removeWhere(
-        (element) => element.id == getIt<LocalDbService>().getUserInfo().id);
+    result.removeWhere((e) => e.id == getIt<LocalDbService>().getUserInfo().id);
 
     emit(state.copyWith(
       contacts: result,

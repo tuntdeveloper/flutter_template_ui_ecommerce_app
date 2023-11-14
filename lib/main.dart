@@ -6,7 +6,8 @@ import 'package:stylish/data/local_db/local_db.dart';
 import 'package:stylish/firebase_options.dart';
 import 'package:stylish/screens/auth/bloc/auth_bloc.dart';
 import 'package:stylish/screens/auth/signin_screen.dart';
-import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_bloc.dart';
+import 'package:stylish/screens/chat/chat_call_bloc/chat_call_bloc.dart';
 import 'package:stylish/screens/chat/chat_session_screen.dart';
 
 import 'data/di/dependency_injection.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => getIt<AuthBloc>()),
         BlocProvider(create: (_) => getIt<ChatBloc>()),
+        BlocProvider(create: (_) => getIt<ChatCallBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

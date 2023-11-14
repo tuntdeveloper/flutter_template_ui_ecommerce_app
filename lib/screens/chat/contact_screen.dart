@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
-import 'package:stylish/screens/chat/bloc/chat_event.dart';
-import 'package:stylish/screens/chat/bloc/chat_state.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_bloc.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_event.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_state.dart';
 import 'package:stylish/screens/chat/message_screen.dart';
 
 class ContactScreen extends StatefulWidget {

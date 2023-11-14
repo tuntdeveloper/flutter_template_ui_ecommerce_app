@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stylish/models/chat/chat_session.dart';
 import 'package:stylish/models/chat/message.dart';
-import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
-import 'package:stylish/screens/chat/bloc/chat_event.dart';
-import 'package:stylish/screens/chat/bloc/chat_state.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_bloc.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_event.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_state.dart';
+import 'package:stylish/screens/chat/chat_call_video_screen.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen(
@@ -55,6 +56,7 @@ class _MessageScreenState extends State<MessageScreen> {
     return BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: const Icon(
@@ -66,6 +68,28 @@ class _MessageScreenState extends State<MessageScreen> {
             'Message',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
+          actions: [
+            GestureDetector(
+                onTap: () {
+                  ChatCallVideoScreen.push(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    CupertinoIcons.phone_circle,
+                    color: Colors.black,
+                  ),
+                )),
+            GestureDetector(
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    CupertinoIcons.videocam_circle,
+                    color: Colors.black,
+                  ),
+                )),
+          ],
         ),
         body: SizedBox.expand(
           child: GestureDetector(

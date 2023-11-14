@@ -8,9 +8,9 @@ import 'package:stylish/screens/auth/bloc/auth_bloc.dart';
 import 'package:stylish/screens/auth/bloc/auth_event.dart';
 import 'package:stylish/screens/auth/bloc/auth_state.dart';
 import 'package:stylish/screens/auth/signin_screen.dart';
-import 'package:stylish/screens/chat/bloc/chat_bloc.dart';
-import 'package:stylish/screens/chat/bloc/chat_event.dart';
-import 'package:stylish/screens/chat/bloc/chat_state.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_bloc.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_event.dart';
+import 'package:stylish/screens/chat/chat_bloc/chat_state.dart';
 import 'package:stylish/screens/chat/contact_screen.dart';
 import 'package:stylish/screens/chat/message_screen.dart';
 
