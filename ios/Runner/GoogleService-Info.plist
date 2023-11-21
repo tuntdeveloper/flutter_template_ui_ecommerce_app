@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAGhlY7MH7uXcdCOs8ucYOLx4lFlfxAU0c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>197044727812</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.stylish</string>
+	<key>PROJECT_ID</key>
+	<string>flutter-chat-project-c4ff5</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutter-chat-project-c4ff5.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:197044727812:ios:79da6979db5336ca3c4551</string>
+	<key>DATABASE_URL</key>
+	<string>https://flutter-chat-project-c4ff5-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

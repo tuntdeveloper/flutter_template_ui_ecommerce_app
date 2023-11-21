@@ -5,8 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 class ChatCallVoiceScreen extends StatefulWidget {
   const ChatCallVoiceScreen({super.key});
 
-
-
   @override
   State<ChatCallVoiceScreen> createState() => _ChatCallVoiceScreenState();
 }
