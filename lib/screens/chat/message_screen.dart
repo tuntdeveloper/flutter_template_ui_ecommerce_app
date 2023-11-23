@@ -64,10 +64,7 @@ class _MessageScreenState extends State<MessageScreen> {
               color: Colors.black,
             ),
           ),
-          title: Text(
-            'Message',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          title: Text('Message', style: Theme.of(context).textTheme.bodyLarge),
           actions: [
             GestureDetector(
                 onTap: () {
